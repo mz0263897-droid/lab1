@@ -1,89 +1,78 @@
 package org.example;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
 /**
- * Клас Lab1BylanynKI305 створює квадратну матрицю заданого користувачем розміру
- * і виводить у її нижній частині рівнобедрений трикутник, заповнений заданим символом.
+ * Клас <code>Lab1BilanynKI305</code> реалізує лабораторну роботу №1.
  * <p>
- * Висота трикутника визначається автоматично залежно від розміру матриці,
- * а його вершина розташована по центру верхньої межі трикутної області.
- * Решта комірок заповнюється пробілами для формування фону.
- * Результат виводиться на екран та одночасно записується у файл KZP.txt.
+ * Програма створює зубчасту (нерівномірну) матрицю, що містить
+ * рівнобедрений трикутник у нижній частині квадратної області.
+ * Символ-заповнювач вводиться користувачем.
+ * Результат виводиться у консоль та записується у файл <b>KZP.txt</b>.
  * </p>
  */
-
 public class Lab1BilanynKI305 {
+    public static void main(String[] args) throws FileNotFoundException {
+        int nRows;         // розмір квадратної матриці
+        char[][] arr;      // зубчаста матриця
+        String filler;     // символ-заповнювач
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        Scanner in = new Scanner(System.in);
+        File dataFile = new File("KZP.txt");
+        PrintWriter fout = new PrintWriter(dataFile);
 
-        // Ввід параметрів користувачем
-        System.out.print("Введіть розмір матриці: ");
-        int matrixSize = scanner.nextInt();
+        // --- Ввід розміру матриці ---
+        System.out.print("Введіть розмір квадратної матриці: ");
+        nRows = in.nextInt();
+        in.nextLine(); // очищення буфера після nextInt()
 
-        System.out.print("Введіть символ заповнювач: ");
-        String filler = scanner.next();
+        // --- Ввід символу заповнювача ---
+        System.out.print("Введіть символ-заповнювач: ");
+        filler = in.nextLine();
 
-        // Перевірка коректності введеного символу
+        // --- Перевірка на коректність введеного символу ---
         if (filler.length() != 1) {
-            System.out.println("Помилка: потрібно ввести лише один символ!");
+            System.out.println("Помилка: введіть лише один символ!");
+            fout.close();
             return;
         }
 
-        // Створення масиву
-        String[][] matrix = createMatrixShape(matrixSize);
-
-        // Виведення результату
-        System.out.print("Результат матриці: ");
-        try {
-            generateTriangle(matrix, filler, matrixSize, "KZP.txt");
-        } catch (IOException e) {
-            System.out.println("Помилка під час запису у файл: " + e.getMessage());
+        // --- Створення зубчастої матриці ---
+        arr = new char[nRows][];
+        for (int i = 0; i < nRows; i++) {
+            int length = 0;
+            // підрахунок, скільки елементів буде у поточному рядку
+            for (int j = 0; j < nRows; j++) {
+                if (i >= nRows / 2 && (j >= nRows - i - 1 && j <= i)) {
+                    length++;
+                }
+            }
+            arr[i] = new char[length];
         }
-    }
-     //Метод формує і виводить матрицю з рівнобедреним трикутником у нижній частині.
-    public static void generateTriangle(String[][] matrix, String symbol, int size, String fileName) throws IOException {
-        StringBuilder output = new StringBuilder();
 
-        for (int i = 0; i < size; i++) {
-            int symbolIndex = 0;
+        System.out.println("\nРезультат матриці (зубчастий масив):\n");
 
-            for (int j = 0; j < size; j++) {
-                if (i >= size / 2 && j >= size - i - 1 && j <= i) {
-                    matrix[i][symbolIndex++] = symbol;
-                    System.out.print(symbol + " ");
-                    output.append(symbol).append(" ");
+        // --- Заповнення та вивід зубчастої матриці ---
+        for (int i = 0; i < nRows; i++) {
+            int index = 0; // позиція в підмасиві
+            for (int j = 0; j < nRows; j++) {
+                if (i >= nRows / 2 && (j >= nRows - i - 1 && j <= i)) {
+                    arr[i][index] = filler.charAt(0);
+                    System.out.print(arr[i][index] + " ");
+                    fout.print(arr[i][index] + " ");
+                    index++;
                 } else {
                     System.out.print("  ");
-                    output.append("  ");
+                    fout.print("  ");
                 }
             }
             System.out.println();
-            output.append("\n");
+            fout.println();
         }
 
-        // Запис результату у файл
-        try (FileWriter writer = new FileWriter(fileName)) {
-            writer.write(output.toString());
-        }
-    }
-    //Метод створює зубчасту структуру матриці відповідно до трикутної форми.
-    public static String[][] createMatrixShape(int size) {
-        String[][] matrix = new String[size][];
-
-        for (int i = 0; i < size; i++) {
-            int validLength = 0;
-            for (int j = 0; j < size; j++) {
-                if (i >= size / 2 && j >= size - i - 1 && j <= i) {
-                    validLength++;
-                }
-            }
-            matrix[i] = new String[validLength];
-        }
-
-        return matrix;
+        fout.flush();
+        fout.close();
+        System.out.println("\nРезультат записано у файл KZP.txt");
     }
 }
