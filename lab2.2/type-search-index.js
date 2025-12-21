@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html","k":"18"},{"p":"Bilanyn.Roman.KI_305","l":"Cat"},{"p":"Bilanyn.Roman.KI_305","l":"CatApp"}];updateSearchResults();

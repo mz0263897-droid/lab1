@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html","k":"18"},{"p":"KI.Bilanyn.lab6","l":"Box"},{"p":"KI.Bilanyn.lab6","l":"Conveyor"},{"p":"KI.Bilanyn.lab6","l":"ConveyorDriver"},{"p":"KI.Bilanyn.lab6","l":"Item","k":"10"},{"p":"KI.Bilanyn.lab6","l":"PackageItem"}];updateSearchResults();
